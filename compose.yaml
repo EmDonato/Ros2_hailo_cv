@@ -1,0 +1,28 @@
+services:
+  cv:
+    image: robot-modules/computer_vision:humble
+    platform: ${ROBOT_PLATFORM:-linux/arm64}
+    container_name: open-pirobot-cv
+    init: true
+    stop_signal: SIGINT
+    stop_grace_period: 60s
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ROS_DISTRO: humble
+        UID: ${HOST_UID:-1000}
+        GID: ${HOST_GID:-1000}
+    network_mode: host
+    devices:
+      - /dev/hailo0:/dev/hailo0
+    environment:
+      RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+      ROS_DOMAIN_ID: ${ROS_DOMAIN_ID:-0}
+      ROS_LOCALHOST_ONLY: 0
+    volumes:
+      - /dev:/dev
+      - ./config:/ws/config:ro
+      - ./data:/data
+    command:
+      - bash

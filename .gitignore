@@ -1,0 +1,8 @@
+build/
+install/
+log/
+logs/
+data/*
+!data/.gitkeep
+**/__pycache__/
+**/*.pyc
